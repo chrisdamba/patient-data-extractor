@@ -31,6 +31,18 @@ The application follows a modular, layered architecture to ensure separation of 
 - Unit tests for individual components.
 - Integration tests for API endpoints and database interactions.
 
+## Running the Application
+1. Install dependencies: `npm install`
+2. Run tests: `npm test`
+3. Start the application: `npm start`
+
+## API Endpoints
+
+- **POST /api/patient-data/process**
+  - Request: A plain-text message in the required format.
+  - Response: Extracted patient data in JSON format.
+  - Error Handling: Returns meaningful error messages for incorrect or missing data.
+
 ## Error Handling and Logging
 - Implement a centralized error handling middleware to catch and format all errors.
 - Use a structured logging solution (e.g., Winston) to log errors, warnings, and important events.
@@ -43,8 +55,5 @@ The application follows a modular, layered architecture to ensure separation of 
 - Use dependency injection to make the application more modular and easier to extend.
 - Consider implementing a message queue (e.g., RabbitMQ, Apache Kafka) for handling high message volumes and ensuring fault tolerance.
 
-## Deployment and DevOps
-- Use containerization (Docker) for consistent deployment across environments.
-- Implement CI/CD pipelines for automated testing and deployment.
-- Set up monitoring and alerting for application health and performance.
+
 
