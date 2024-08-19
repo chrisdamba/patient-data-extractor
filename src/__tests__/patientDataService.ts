@@ -1,5 +1,5 @@
 import {MongoPatientDataService} from '../services/patientData'
-import {PatientDataExtractor, PatientData} from '../patientDataExtractor'
+import {PatientDataExtractor, PatientData} from '../utils/patientDataExtractor'
 
 describe('MongoPatientDataService', () => {
   let service: MongoPatientDataService

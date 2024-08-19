@@ -1,4 +1,4 @@
-import {PatientDataExtractor} from '../patientDataExtractor'
+import {PatientDataExtractor} from '../utils/patientDataExtractor'
 
 describe('PatientDataExtractor', () => {
   const extractor = new PatientDataExtractor()
@@ -109,7 +109,7 @@ DET|1|I|^^MainDepartment^101^Room 1|Common Cold
         firstName: 'John',
         middleName: 'A',
       })
-      expect(result.dateOfBirth).toBe('1970-01-01') 
+      expect(result.dateOfBirth).toBe('1970-01-01')
     })
 
     it('handles missing middle name without trailing caret', () => {

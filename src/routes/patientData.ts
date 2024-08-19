@@ -1,6 +1,6 @@
 import express from 'express'
 import {PatientDataController} from '../controllers/patientData'
-import {PatientDataExtractor} from '../patientDataExtractor'
+import {PatientDataExtractor} from '../utils/patientDataExtractor'
 import {MongoPatientDataService} from '../services/patientData'
 
 const router = express.Router()

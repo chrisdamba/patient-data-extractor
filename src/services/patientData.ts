@@ -1,4 +1,4 @@
-import {PatientData, PatientDataExtractor} from '../patientDataExtractor'
+import {PatientData, PatientDataExtractor} from '../utils/patientDataExtractor'
 
 export interface PatientDataService {
   extractAndSavePatientData(message: string): Promise<PatientData>
@@ -23,11 +23,11 @@ export class MongoPatientDataService implements PatientDataService {
     // In a real implementation, this would save to MongoDB
     console.log('Saving patient data:', data)
     if (this.db.collection && typeof this.db.collection === 'function') {
-      await this.db.collection('patients').insertOne(data);
+      await this.db.collection('patients').insertOne(data)
     } else {
       // Fallback for tests or environments without a real MongoDB
-      console.log('Saving patient data to MongoDB:', data);
-      await new Promise(resolve => setTimeout(resolve, 100));
+      console.log('Saving patient data to MongoDB:', data)
+      await new Promise((resolve) => setTimeout(resolve, 100))
     }
   }
 }

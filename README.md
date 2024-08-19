@@ -31,29 +31,129 @@ The application follows a modular, layered architecture to ensure separation of 
 - Unit tests for individual components.
 - Integration tests for API endpoints and database interactions.
 
-## Running the Application
-1. Install dependencies: `npm install`
-2. Run tests: `npm test`
-3. Start the application: `npm start`
 
-## API Endpoints
+## Getting Started
 
-- **POST /api/patient-data/process**
-  - Request: A plain-text message in the required format.
-  - Response: Extracted patient data in JSON format.
-  - Error Handling: Returns meaningful error messages for incorrect or missing data.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## Error Handling and Logging
-- Implement a centralized error handling middleware to catch and format all errors.
-- Use a structured logging solution (e.g., Winston) to log errors, warnings, and important events.
-- Include relevant context (e.g., request ID, user ID) in logs for easier debugging.
+### Prerequisites
 
-## Scalability and Future Extensions
-- Use asynchronous processing for time-consuming tasks.
-- Implement caching strategies to reduce database load.
-- Design the API with versioning to allow for future changes without breaking existing clients.
-- Use dependency injection to make the application more modular and easier to extend.
-- Consider implementing a message queue (e.g., RabbitMQ, Apache Kafka) for handling high message volumes and ensuring fault tolerance.
+- Node.js (version 18 or later)
+- npm (usually comes with Node.js)
+- MongoDB (for database storage)
+
+### Installation
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/chrisdamba/patient-data-extractor.git
+   cd patient-data-extractor
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
 
+### Running the Application
 
+To start the server in development mode:
+
+```
+npm run dev
+```
+
+The server will start on `http://localhost:3000` by default.
+
+### Running Tests
+
+To run the test suite:
+
+```
+npm test
+```
+
+## Testing the Express.js API Endpoint Using Postman
+
+Follow these steps to test the API endpoint:
+
+1. Open Postman.
+
+2. Create a new POST request.
+
+3. Set the request URL to `http://localhost:3000/api/patient-data/process`.
+
+4. In the Headers tab, add a new header:
+   - Key: `Content-Type`
+   - Value: `application/json`
+
+5. In the Body tab:
+   - Select `raw`
+   - Choose `JSON` from the dropdown
+   - Enter the following JSON:
+
+     ```json
+     {
+       "message": "EVT|TYPE|20230502112233\nPRS|1|9876543210^^^Location^ID||Smith^John^A|||M|19700101|\nDET|1|I|^^MainDepartment^101^Room 1|Common Cold"
+     }
+     ```
+
+6. Click "Send" to make the request.
+
+7. You should receive a response with status 200 and a JSON body containing the extracted patient data:
+
+   ```json
+   {
+     "fullName": {
+       "lastName": "Smith",
+       "firstName": "John",
+       "middleName": "A"
+     },
+     "dateOfBirth": "1970-01-01",
+     "primaryCondition": "Common Cold"
+   }
+   ```
+
+## API Documentation
+
+### POST /api/patient-data/process
+
+Processes a patient data message.
+
+**Request Body:**
+
+```json
+{
+  "message": "string"
+}
+```
+
+**Response:**
+
+- Status: 200 OK
+- Body: Extracted patient data
+
+```json
+{
+  "fullName": {
+    "lastName": "string",
+    "firstName": "string",
+    "middleName": "string"
+  },
+  "dateOfBirth": "string",
+  "primaryCondition": "string"
+}
+```
+
+**Error Responses:**
+
+- 400 Bad Request: If the message is missing or invalid
+- 500 Internal Server Error: If there's an error processing the message
+
+## Built With
+
+- [Node.js](https://nodejs.org/)
+- [Express.js](https://expressjs.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [MongoDB](https://www.mongodb.com/)
