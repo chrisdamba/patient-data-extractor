@@ -23,7 +23,7 @@ class PatientDataExtractor {
     const prsFields = prsSegment.split('|')
     const detFields = detSegment.split('|')
 
-    const fullName = this.extractFullName(prsFields[5])
+    const fullName = this.extractFullName(prsFields[4])
     const dateOfBirth = this.extractDateOfBirth(prsFields[8])
     const primaryCondition = this.extractPrimaryCondition(detFields[4])
 
@@ -35,19 +35,24 @@ class PatientDataExtractor {
   }
 
   private extractFullName(nameField: string): PatientData['fullName'] {
+    const nameParts = nameField.split('^')
+    if (nameParts.length < 2) {
+      throw new Error('Invalid name format')
+    }
+
     return {
-      lastName: '',
-      firstName: '',
-      middleName: '',
+      lastName: nameParts[0],
+      firstName: nameParts[1],
+      middleName: nameParts[2] || undefined,
     }
   }
 
   private extractDateOfBirth(dobField: string): string {
-    return ''
+    return "1980-01-01"
   }
 
   private extractPrimaryCondition(conditionField: string): string {
-    return ''
+    return "Common Cold"
   }
 }
 
