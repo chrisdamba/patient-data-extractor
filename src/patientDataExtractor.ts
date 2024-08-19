@@ -24,7 +24,7 @@ class PatientDataExtractor {
     const detFields = detSegment.split('|')
 
     const fullName = this.extractFullName(prsFields[4])
-    const dateOfBirth = this.extractDateOfBirth(prsFields[8])
+    const dateOfBirth = this.extractDateOfBirth(prsFields)
     const primaryCondition = this.extractPrimaryCondition(detFields[4])
 
     return {
@@ -47,20 +47,28 @@ class PatientDataExtractor {
     }
   }
 
-  private extractDateOfBirth(dobField: string): string {
-    if (!this.DATE_REGEX.test(dobField)) {
+  private extractDateOfBirth(prsFields: string[]): string {
+    const dobField = prsFields.find((field) =>
+      this.DATE_REGEX.test(field.trim())
+    )
+
+    if (!dobField) {
       throw new Error('Invalid date of birth format')
     }
 
-    const year = dobField.slice(0, 4)
-    const month = dobField.slice(4, 6)
-    const day = dobField.slice(6, 8)
+    const trimmedDOB = dobField.trim()
+    const year = trimmedDOB.slice(0, 4)
+    const month = trimmedDOB.slice(4, 6)
+    const day = trimmedDOB.slice(6, 8)
 
     return `${year}-${month}-${day}`
   }
 
   private extractPrimaryCondition(conditionField: string): string {
-    return 'Common Cold'
+    if (!conditionField.trim()) {
+      throw new Error('Missing primary condition')
+    }
+    return conditionField.trim()
   }
 }
 

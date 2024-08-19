@@ -68,7 +68,7 @@ DET|1|I|^^MainDepartment^101^Room 1|Common Cold
     )
   })
 
-  it.skip('throws when missing primary condition', () => {
+  it('throws when missing primary condition', () => {
     // arrange
     const messageWithMissingCondition = validMessage.replace('Common Cold', '')
 
@@ -76,5 +76,90 @@ DET|1|I|^^MainDepartment^101^Room 1|Common Cold
     expect(() => extractor.extract(messageWithMissingCondition)).toThrow(
       'Missing primary condition'
     )
+  })
+
+  describe('handles trailing identifiers', () => {
+    it('extracts data correctly when segments end without a pipe', () => {
+      // arrange
+      const messageWithoutTrailingPipe = validMessage.replace(
+        '19700101|',
+        '19700101'
+      )
+
+      // act
+      const result = extractor.extract(messageWithoutTrailingPipe)
+
+      // assert
+      expect(result.dateOfBirth).toBe('1970-01-01')
+    })
+
+    it('extracts name correctly when name field ends without a pipe', () => {
+      // arrange
+      const messageWithoutNamePipe = validMessage.replace(
+        'Smith^John^A|',
+        'Smith^John^A'
+      )
+
+      // act
+      const result = extractor.extract(messageWithoutNamePipe)
+
+      // assert
+      expect(result.fullName).toEqual({
+        lastName: 'Smith',
+        firstName: 'John',
+        middleName: 'A',
+      })
+      expect(result.dateOfBirth).toBe('1970-01-01') 
+    })
+
+    it('handles missing middle name without trailing caret', () => {
+      // arrange
+      const messageWithoutMiddleNameCaret = validMessage.replace(
+        'Smith^John^A',
+        'Smith^John'
+      )
+
+      // act
+      const result = extractor.extract(messageWithoutMiddleNameCaret)
+
+      // assert
+      expect(result.fullName).toEqual({
+        lastName: 'Smith',
+        firstName: 'John',
+        middleName: undefined,
+      })
+    })
+
+    it('handles missing middle name with trailing caret', () => {
+      // arrange
+      const messageWithMiddleNameCaret = validMessage.replace(
+        'Smith^John^A',
+        'Smith^John^'
+      )
+
+      // act
+      const result = extractor.extract(messageWithMiddleNameCaret)
+
+      // assert
+      expect(result.fullName).toEqual({
+        lastName: 'Smith',
+        firstName: 'John',
+        middleName: undefined,
+      })
+    })
+
+    it('extracts primary condition correctly when DET segment ends without a pipe', () => {
+      // arrange
+      const messageWithoutConditionPipe = validMessage.replace(
+        'Common Cold\n',
+        'Common Cold'
+      )
+
+      // act
+      const result = extractor.extract(messageWithoutConditionPipe)
+
+      // assert
+      expect(result.primaryCondition).toBe('Common Cold')
+    })
   })
 })
