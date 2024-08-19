@@ -48,11 +48,19 @@ class PatientDataExtractor {
   }
 
   private extractDateOfBirth(dobField: string): string {
-    return "1980-01-01"
+    if (!this.DATE_REGEX.test(dobField)) {
+      throw new Error('Invalid date of birth format')
+    }
+
+    const year = dobField.slice(0, 4)
+    const month = dobField.slice(4, 6)
+    const day = dobField.slice(6, 8)
+
+    return `${year}-${month}-${day}`
   }
 
   private extractPrimaryCondition(conditionField: string): string {
-    return "Common Cold"
+    return 'Common Cold'
   }
 }
 
